@@ -6,6 +6,7 @@ import Search from "./Search";
 
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     console.log("Render", userIngredients);
@@ -19,6 +20,7 @@ const Ingredients = () => {
   );
 
   const addIngredientHandler = (ingredient) => {
+    setIsLoading(true);
     fetch(
       "https://react-hoo-d1fe1-default-rtdb.firebaseio.com/ingredients.json",
       {
@@ -28,6 +30,7 @@ const Ingredients = () => {
       }
     )
       .then((Response) => {
+        setIsLoading(false);
         return Response.json();
       })
       .then((responseData) => {
@@ -39,12 +42,14 @@ const Ingredients = () => {
   };
 
   const removeIngredientHandler = (ingredientId) => {
+    setIsLoading(true);
     fetch(
       `https://react-hoo-d1fe1-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`,
       {
         method: "DELETE",
       }
     ).then((Response) => {
+      setIsLoading(false);
       setUserIngredients((prevIngredients) =>
         prevIngredients.filter((ingredient) => ingredient.id !== ingredientId)
       );
@@ -53,7 +58,10 @@ const Ingredients = () => {
 
   return (
     <div className="App">
-      <IngredientForm onAddIngredient={addIngredientHandler} />
+      <IngredientForm
+        onAddIngredient={addIngredientHandler}
+        loading={isLoading}
+      />
 
       <section>
         <Search onLoadIngredients={filteredIngredientsHandler} />
