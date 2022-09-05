@@ -25,6 +25,10 @@ const Ingredients = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log("Render", userIngredients);
+  }, [userIngredients]);
+
   const addIngredientHandler = (ingredient) => {
     fetch(
       "https://react-hoo-d1fe1-default-rtdb.firebaseio.com/ingredients.json",
